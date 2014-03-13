@@ -1,0 +1,282 @@
+<!--
+Min, Max
+
+Durchschnitt letzen 5Messungen
+
+Button für CSV generator
+
+Optinal:
+alte Units speichern und diese beim wechsel zurück mit ausgeben
+-->
+
+<!DOCTYPE html>
+<html lang="de">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="shortcut icon" href="img/favicon.ico">
+
+    <title>FireBird - EA Thiere</title>
+
+    <!-- Bootstrap core CSS -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+
+    <!-- Custom styles for this template -->
+    <link href='http://fonts.googleapis.com/css?family=Lato:100,300,400' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="css/animate.css"/>
+    <link rel="stylesheet" type="text/css" href="css/elements.css"/>
+    <link rel="stylesheet" type="text/css" href="css/custom.css"/>
+    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+    <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+    <script src="js/jquery.js"></script>
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+    <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+    <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+    <!--[if IE]>
+    <style>
+        .showcase {
+            zoom: 0.6;
+        }
+    </style>
+    <![endif]-->
+</head>
+
+<body>
+
+<!-- Navbar
+	============= -->
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+        <div class="navbar-header">
+            <!--
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+
+            --->
+            <a class="navbar-brand" href="index.html">FireBird</a>
+        </div>
+        <!--
+        <div class="collapse navbar-collapse">
+            <ul class="nav navbar-nav">
+                <li class="active"><a href="index.html">Home</a></li>
+            </ul>
+        </div>
+        -->
+    </div>
+</div>
+
+<!-- Main body
+================== -->
+<div class="wrapper">
+    <div class="section-header">
+        <div class="container">
+            <div class="row">
+                <div class="col-sm-12">
+                    <!-- Remove the .animated class if you don't want things to move -->
+                    <h1 class="animated slideInLeft"><span>METEX</span></h1>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container">
+        <div id="idErrorBox"></div>
+        <div class="row">
+            <div class="col-xs-9">
+                <form role="form" id="idIntervallChange" class="form-box" onsubmit="return false;">
+                    <div class="form-group">
+                        <label>Zeitintervall</label>
+                        <select class="form-control">
+                            <option value="0.00001">Live</option>
+                            <option value="0.5">0.5 Sekunden</option>
+                            <option value="1">1 Sekunde</option>
+                            <option value="5">5 Sekunden</option>
+                            <option value="10">10 Sekunden</option>
+                        </select>
+                    </div>
+                    <button id="idSubmitButton" type="submit" data-state="1" class="hl-btn-blue hl-btn col-xs-12">Starten</button>
+                    <div class="clearfix"></div>
+                </form>
+            </div>
+            <div id="idPanelField" class="col-xs-3 hidden">
+                <div class="panel panel-default">
+                    <div class="panel-heading">
+                        <h3 class="panel-title">Daten</h3>
+                    </div>
+                    <div class="panel-body">
+                        <ul class="list-unstyled">
+                            <li><strong>Einheit</strong> <span id="idEinheit"></span></li>
+                            <li><strong>Wert</strong> <span id="idWert"></span></li>
+                            <li id="idPolungList" class="hidden"><strong>Polung</strong> <span id="idPolung"></span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="placeholder" class="row margin-top-20 hidden">
+            <div style="height: 400px;width: 100%"></div>
+        </div>
+    </div>
+    <div class="clearfix margin-bottom-20"></div>
+</div>
+
+<script type="text/javascript">
+    var ws, aSocketData = [], sUnit, bInitPlot = false, sJSONBackUP;
+    jQuery(document).ready(function () {
+        jQuery('#idIntervallChange').submit(function () {
+            parameter = { };
+            if(jQuery('#idSubmitButton').data('state') == 0){
+                jQuery('#idIntervallChange select').removeAttr('disabled');
+                jQuery('#idSubmitButton').data('state',1).text('Starten');
+                ws.close();
+                return false;
+            }
+            fIntervall = jQuery('#idIntervallChange select').val();
+            jQuery('#idIntervallChange select').attr('disabled','true');
+            jQuery('#idSubmitButton').data('state',0).text('Stoppen');
+            parameter.intervall = fIntervall;
+            sendCommand('start', parameter);
+            return false;
+        });
+    });
+
+    function initPlot() {
+        /*if (bInitPlot) {
+            return true;
+        }*/
+        jQuery.plot("#placeholder div", [
+            { label: "Werte", data: aSocketData }
+        ], {
+            colors: ["#edc240"],
+            series: {
+                lines: { show: true },
+                points: { show: true }
+            },
+            grid: {
+                hoverable: true,
+                clickable: true,
+                borderWidth: {
+                    top: 1,
+                    right: 1,
+                    bottom: 1,
+                    left: 1
+                },
+                color: "#746441"
+            },
+            yaxis: {
+                axisMargin: 10,
+                tickDecimals: 0
+            },
+            shadowSize: 1,
+            tooltip: true
+        });
+        bInitPlot = true;
+    }
+
+    function connectToWebSocket(sJSON) {
+        if (ws == null) {
+            sJSONBackUP = sJSON;
+            try {
+                ws = new WebSocket('ws://localhost:12345');
+                ws.onopen = function(){
+                    ws.send(sJSONBackUP);
+                };
+                ws.onclose = function(){
+                    onClose();
+                };
+                ws.onmessage = function (evt) {
+                    oData = JSON.parse(evt.data);
+                    switch (oData.command) {
+                        case 'update':
+                            getNewData(oData.parameter);
+                            break;
+                        default:
+                            errorHandling(['smth go wrong']);
+                    }
+                };
+            } catch (err) {
+                errorHandling(['please check websocket connection']);
+            }
+        }else{
+            ws.send(sJSON);
+        }
+    }
+
+    function sendCommand(sCommand, oParams) {
+        var webserver = { };
+        webserver.command = sCommand;
+        webserver.parameter = oParams;
+        sJSON = JSON.stringify(webserver);
+        connectToWebSocket(sJSON);
+    }
+
+    function onClose(){
+        ws = null;
+        jQuery('#placeholder, #idPanelField').addClass('hidden');
+    }
+
+    function getNewData(oParams) {
+        if (typeof oParams.polarity == 'undefined') {
+            jQuery('#idPolungList').addClass('hidden');
+        } else {
+            jQuery('#idPolungList').removeClass('hidden');
+            jQuery('#idPolung').text(oParams.polarity);
+        }
+        jQuery('#idWert').text(oParams.value);
+        if (sUnit != oParams.unit) {
+            aSocketData = [];
+            sUnit = oParams.unit;
+        }
+        jQuery('#idEinheit').text(oParams.unit);
+
+        initPlot();
+
+        aSocketData.push([ (new Date).getTime(), oParams.value]);
+        /*jQuery.plot("#placeholder div").setData(aSocketData);
+        jQuery.plot("#placeholder div").draw();*/
+
+        jQuery('#placeholder, #idPanelField').removeClass('hidden');
+    }
+
+    function errorHandling(aError) {
+        sHTML = '<div class="alert alert-danger">'+
+                    '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times</button>';
+        jQuery.each(aError, function (iKey, sError) {
+            sHTML += '<p>'+sError+'</p>';
+        });
+        sHTML += '</div>';
+        jQuery('#idErrorBox').html(sHTML);
+    }
+
+</script>
+<!-- Legal 
+============= -->
+<div class="legal">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-12">
+                <p>&copy; Johannes Wolf &amp; Oliver Horn</p>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
+<script src="js/bootstrap.min.js"></script>
+<script src="js/custom.js"></script>
+<script src="js/scrolltopcontrol.js"></script>
+<!-- Scroll to top javascript -->
+<script src="js/flot/jquery.flot.min.js"></script>
+<script src="js/flot/jquery.flot.resize.min.js"></script>
+</body>
+</html>
