@@ -91,16 +91,25 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         <div class="row">
             <div class="col-xs-9">
                 <form role="form" id="idIntervallChange" class="form-box" onsubmit="return false;">
-                    <div class="form-group">
-                        <label>Zeitintervall</label>
-                        <select class="form-control">
-                            <option value="0.00001">Live</option>
-                            <option value="0.5">0.5 Sekunden</option>
-                            <option value="1">1 Sekunde</option>
-                            <option value="5">5 Sekunden</option>
-                            <option value="10">10 Sekunden</option>
-                        </select>
-                    </div>
+					<div class="form-group">
+						<label for="idIntervall">Zeitintervall</label>
+						<select id="idIntervall" class="form-control">
+							<option value="0.00001">Live</option>
+							<option value="0.5">0.5 Sekunden</option>
+							<option value="1">1 Sekunde</option>
+							<option value="5">5 Sekunden</option>
+							<option value="10">10 Sekunden</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="idDauer">Messdauer</label>
+						<select id="idDauer" class="form-control">
+							<option value="1">1 Minuten</option>
+							<option value="10">10 Minuten</option>
+							<option value="30">30 Minuten</option>
+							<option value="60">1 Stunde</option>
+						</select>
+					</div>
                     <button id="idSubmitButton" type="submit" data-state="1" class="hl-btn-blue hl-btn col-xs-12">Starten</button>
                     <div class="clearfix"></div>
                 </form>
@@ -130,57 +139,70 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 </div>
 
 <script type="text/javascript">
-    var ws, aSocketData = [], sUnit, bInitPlot = false, sJSONBackUP;
+    var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5;
+
+	var series = {
+		label: "Werte",
+		data: [],
+		lines: {
+			show: true,
+			fill: true
+		},
+		points: { show: true }
+	};
+
     jQuery(document).ready(function () {
         jQuery('#idIntervallChange').submit(function () {
             parameter = { };
             if(jQuery('#idSubmitButton').data('state') == 0){
-                jQuery('#idIntervallChange select').removeAttr('disabled');
+				jQuery('#idIntervall, #idDauer').removeAttr('disabled');
                 jQuery('#idSubmitButton').data('state',1).text('Starten');
                 ws.close();
                 return false;
             }
-            fIntervall = jQuery('#idIntervallChange select').val();
-            jQuery('#idIntervallChange select').attr('disabled','true');
+			fIntervall = jQuery('#idIntervall').val();
+			iDauer = jQuery('#idDauer').val();
+			jQuery('#idIntervall, #idDauer').attr('disabled','true');
             jQuery('#idSubmitButton').data('state',0).text('Stoppen');
             parameter.intervall = fIntervall;
             sendCommand('start', parameter);
+			series.data = [];
             return false;
         });
-    });
 
-    function initPlot() {
-        /*if (bInitPlot) {
-            return true;
-        }*/
-        jQuery.plot("#placeholder div", [
-            { label: "Werte", data: aSocketData }
-        ], {
-            colors: ["#edc240"],
-            series: {
-                lines: { show: true },
-                points: { show: true }
-            },
-            grid: {
-                hoverable: true,
-                clickable: true,
-                borderWidth: {
-                    top: 1,
-                    right: 1,
-                    bottom: 1,
-                    left: 1
-                },
-                color: "#746441"
-            },
-            yaxis: {
-                axisMargin: 10,
-                tickDecimals: 0
-            },
-            shadowSize: 1,
-            tooltip: true
-        });
-        bInitPlot = true;
-    }
+		jQuery('#idIntervall, #idDauer').removeAttr('disabled');
+		plot = jQuery.plot("#placeholder div", [series],{
+			grid: {
+				hoverable: true,
+				borderWidth: 1,
+				minBorderMargin: 20,
+				labelMargin: 10,
+				color: "#746441",
+				backgroundColor: {
+					colors: ["#fff", "#e4f4f4"]
+				},
+				margin: {
+					top: 8,
+					bottom: 20,
+					left: 20
+				}
+			},
+			yaxis: {
+				tickDecimals: 0
+			},
+			xaxis: {
+				mode: "time",
+				timezone: "browser"
+			},
+			shadowSize: 1,
+			tooltip: true,
+			tooltipOpts: {
+				content: function(label, xval, yval, flotItem){
+					return yval+" "+jQuery("#idEinheit").text()+" @ %x";
+				}
+			}
+		});
+    });
 
     function connectToWebSocket(sJSON) {
         if (ws == null) {
@@ -190,9 +212,13 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
                 ws.onopen = function(){
                     ws.send(sJSONBackUP);
                 };
-                ws.onclose = function(){
-                    onClose();
-                };
+				ws.onclose = function(){
+					ws = null;
+					// onClose();
+				};
+				ws.onerror = function(){
+					ws = null;
+				};
                 ws.onmessage = function (evt) {
                     oData = JSON.parse(evt.data);
                     switch (oData.command) {
@@ -220,7 +246,6 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     }
 
     function onClose(){
-        ws = null;
         jQuery('#placeholder, #idPanelField').addClass('hidden');
     }
 
@@ -233,19 +258,32 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         }
         jQuery('#idWert').text(oParams.value);
         if (sUnit != oParams.unit) {
-            aSocketData = [];
+			series.data = [];
             sUnit = oParams.unit;
         }
         jQuery('#idEinheit').text(oParams.unit);
 
-        initPlot();
+		series.data.push([ (new Date).getTime(), oParams.value]);
 
-        aSocketData.push([ (new Date).getTime(), oParams.value]);
-        /*jQuery.plot("#placeholder div").setData(aSocketData);
-        jQuery.plot("#placeholder div").draw();*/
+		deleteOldDataFromSeries();
+
+		plot.setData([series]);
+		plot.setupGrid();
+		plot.draw();
 
         jQuery('#placeholder, #idPanelField').removeClass('hidden');
     }
+
+	function deleteOldDataFromSeries(){
+		var iMinTime = (new Date).getTime() - (iDauer * 60 * 1000);
+
+		for(var i = 0; i <= series.data.length; i++){
+			if(iMinTime < series.data[i][0]){
+				break;
+			}
+			series.data.splice(i, 1);
+		}
+	}
 
     function errorHandling(aError) {
         sHTML = '<div class="alert alert-danger">'+
@@ -273,10 +311,11 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 ================================================== -->
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="js/bootstrap.min.js"></script>
-<script src="js/custom.js"></script>
 <script src="js/scrolltopcontrol.js"></script>
 <!-- Scroll to top javascript -->
 <script src="js/flot/jquery.flot.min.js"></script>
 <script src="js/flot/jquery.flot.resize.min.js"></script>
+<script src="js/flot/jquery.flot.time.min.js"></script>
+<script src="js/flot/jquery.flot.tooltip.min.js"></script>
 </body>
 </html>
