@@ -105,9 +105,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 						<label for="idDauer">Messdauer</label>
 						<select id="idDauer" class="form-control">
 							<option value="1">1 Minuten</option>
+							<option value="3">3 Minuten</option>
+							<option value="5">5 Minuten</option>
 							<option value="10">10 Minuten</option>
-							<option value="30">30 Minuten</option>
-							<option value="60">1 Stunde</option>
 						</select>
 					</div>
                     <button id="idSubmitButton" type="submit" data-state="1" class="hl-btn-blue hl-btn col-xs-12">Starten</button>
@@ -123,9 +123,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
                         <ul class="list-unstyled">
                             <li><strong>Einheit</strong> <span id="idEinheit"></span></li>
                             <li><strong>Wert</strong> <span id="idWert"></span></li>
-                            <li id="idPolungList" class="hidden"><strong>Polung</strong> <span id="idPolung"></span>
-                            </li>
+                            <li id="idPolungList" class="hidden"><strong>Polung</strong> <span id="idPolung"></span></li>
                         </ul>
+						<button class="hl-btn-blue hl-btn col-xs-12" onclick="saveCSV();"><i class="glyphicon glyphicon-save"></i> Save CSV</button>
                     </div>
                 </div>
             </div>
@@ -142,7 +142,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5;
 
 	var series = {
-		label: "Werte",
+		label: false,
 		data: [],
 		lines: {
 			show: true,
@@ -198,7 +198,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 			tooltip: true,
 			tooltipOpts: {
 				content: function(label, xval, yval, flotItem){
-					return yval+" "+jQuery("#idEinheit").text()+" @ %x";
+					var Zeit = new Date();
+					Zeit.setTime (xval);
+					return yval+" "+jQuery("#idEinheit").text()+" @ "+Zeit.getHours()+":"+Zeit.getMinutes()+":"+Zeit.getSeconds()+"."+Zeit.getMilliseconds();
 				}
 			}
 		});
@@ -277,7 +279,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 	function deleteOldDataFromSeries(){
 		var iMinTime = (new Date).getTime() - (iDauer * 60 * 1000);
 
-		for(var i = 0; i <= series.data.length; i++){
+		for(var i = 0, len = series.data.length; i < len; i++){
 			if(iMinTime < series.data[i][0]){
 				break;
 			}
@@ -294,6 +296,16 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         sHTML += '</div>';
         jQuery('#idErrorBox').html(sHTML);
     }
+
+	function saveCSV(){
+		var sString = "";
+		var aData = series.data;
+		for(var i = 0, len = aData.length; i < len; i++){
+			sString += aData[i][0]+"\t"+aData[i][1]+"\t"+sUnit+"\r\n";
+		}
+		var blob = new Blob([sString], {type: "text/plain;charset=utf-8"});
+		saveAs(blob, "firebird.csv");
+	}
 
 </script>
 <!-- Legal 
@@ -312,6 +324,8 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 <!-- Placed at the end of the document so the pages load faster -->
 <script src="js/bootstrap.min.js"></script>
 <script src="js/scrolltopcontrol.js"></script>
+<script src="js/blob.js"></script>
+<script src="js/FileSaver.js"></script>
 <!-- Scroll to top javascript -->
 <script src="js/flot/jquery.flot.min.js"></script>
 <script src="js/flot/jquery.flot.resize.min.js"></script>
