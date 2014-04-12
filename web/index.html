@@ -28,7 +28,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     <link rel="stylesheet" type="text/css" href="css/animate.css"/>
     <link rel="stylesheet" type="text/css" href="css/elements.css"/>
     <link rel="stylesheet" type="text/css" href="css/custom.css"/>
-    <link rel="stylesheet" type="text/css" href="css/style.css"/>
+	<link rel="stylesheet" type="text/css" href="css/style.css"/>
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 
     <script src="js/jquery.js"></script>
@@ -89,46 +89,74 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     <div class="container">
         <div id="idErrorBox"></div>
         <div class="row">
-            <div class="col-xs-9">
-                <form role="form" id="idIntervallChange" class="form-box" onsubmit="return false;">
-					<div class="form-group">
-						<label for="idIntervall">Zeitintervall</label>
-						<select id="idIntervall" class="form-control">
-							<option value="0.00001">Live</option>
-							<option value="0.5">0.5 Sekunden</option>
-							<option value="1">1 Sekunde</option>
-							<option value="5">5 Sekunden</option>
-							<option value="10">10 Sekunden</option>
-						</select>
+			<div class="col-xs-9">
+				<div class="row">
+					<div class="col-xs-12">
+						<form role="form" id="idIntervallChange" class="form-box" onsubmit="return false;">
+							<div class="form-group">
+								<label for="idIntervall">Zeitintervall</label>
+								<select id="idIntervall" class="form-control">
+									<option value="0.00001">Live</option>
+									<option value="0.5">0.5 Sekunden</option>
+									<option value="1">1 Sekunde</option>
+									<option value="5">5 Sekunden</option>
+									<option value="10">10 Sekunden</option>
+								</select>
+							</div>
+							<div class="form-group">
+								<label for="idDauer">Messdauer</label>
+								<select id="idDauer" class="form-control">
+									<option value="1">1 Minuten</option>
+									<option value="3">3 Minuten</option>
+									<option value="5">5 Minuten</option>
+									<option value="10">10 Minuten</option>
+								</select>
+							</div>
+							<button id="idSubmitButton" type="submit" data-state="1" class="hl-btn-blue hl-btn col-xs-12">Starten</button>
+							<div class="clearfix"></div>
+						</form>
 					</div>
-					<div class="form-group">
-						<label for="idDauer">Messdauer</label>
-						<select id="idDauer" class="form-control">
-							<option value="1">1 Minuten</option>
-							<option value="3">3 Minuten</option>
-							<option value="5">5 Minuten</option>
-							<option value="10">10 Minuten</option>
-						</select>
+					<div class="col-xs-12 margin-top-20">
+						<ul id="idLogData" class="list-unstyled"></ul>
 					</div>
-                    <button id="idSubmitButton" type="submit" data-state="1" class="hl-btn-blue hl-btn col-xs-12">Starten</button>
-                    <div class="clearfix"></div>
-                </form>
-            </div>
-            <div id="idPanelField" class="col-xs-3 hidden">
-                <div class="panel panel-default">
-                    <div class="panel-heading">
-                        <h3 class="panel-title">Daten</h3>
-                    </div>
-                    <div class="panel-body">
-                        <ul class="list-unstyled">
-                            <li><strong>Einheit</strong> <span id="idEinheit"></span></li>
-                            <li><strong>Wert</strong> <span id="idWert"></span></li>
-                            <li id="idPolungList" class="hidden"><strong>Polung</strong> <span id="idPolung"></span></li>
-                        </ul>
-						<button class="hl-btn-blue hl-btn col-xs-12" onclick="saveCSV();"><i class="glyphicon glyphicon-save"></i> Save CSV</button>
-                    </div>
-                </div>
-            </div>
+				</div>
+			</div>
+			<div class="col-xs-3">
+				<div class="row">
+					<div class="col-xs-12">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Optionen</h3>
+							</div>
+							<div class="panel-body">
+								<div class="form-group" id="idMinGroup">
+									<label class="control-label" for="idMinInput">Min</label>
+									<input type="text" id="idMinInput" class="form-control" value="0" />
+								</div>
+								<div class="form-group" id="idMaxGroup">
+									<label class="control-label" for="idMaxInput">Max</label>
+									<input type="text" id="idMaxInput" class="form-control" value="1" />
+								</div>
+							</div>
+						</div>
+					</div>
+					<div id="idPanelField" class="col-xs-12 hidden">
+						<div class="panel panel-default">
+							<div class="panel-heading">
+								<h3 class="panel-title">Daten</h3>
+							</div>
+							<div class="panel-body">
+								<ul class="list-unstyled">
+									<li><strong>Einheit</strong> <span id="idEinheit"></span></li>
+									<li><strong>Wert</strong> <span id="idWert"></span></li>
+									<li id="idPolungList" class="hidden"><strong>Polung</strong> <span id="idPolung"></span></li>
+								</ul>
+								<button class="hl-btn-blue hl-btn col-xs-12" onclick="saveCSV();"><i class="glyphicon glyphicon-save"></i> Save CSV</button>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
         </div>
 
         <div id="placeholder" class="row margin-top-20 hidden">
@@ -137,9 +165,8 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     </div>
     <div class="clearfix margin-bottom-20"></div>
 </div>
-
 <script type="text/javascript">
-    var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5;
+    var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5, iMinValue, iMaxValue;
 
 	var series = {
 		label: false,
@@ -151,26 +178,53 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 		points: { show: true }
 	};
 
-    jQuery(document).ready(function () {
+	jQuery(document).ready(function () {
+		/**
+		 * gegen den Cache
+		 */
+		jQuery('#idMinInput').val(0);
+		jQuery('#idMaxInput').val(1);
+		jQuery('#idIntervall, #idDauer').removeAttr('disabled');
+
+		/**
+		 * speichern der MIN/MAX Werte
+		 */
+		checkOptionInput( '#idMinInput' );
+		checkOptionInput( '#idMaxInput' );
+
+		jQuery('#idMinInput, #idMaxInput').change(function(){
+			checkOptionInput( this );
+		});
+
         jQuery('#idIntervallChange').submit(function () {
             parameter = { };
+
+			/**
+			 * Click auf den Stoppen Button
+			 */
             if(jQuery('#idSubmitButton').data('state') == 0){
 				jQuery('#idIntervall, #idDauer').removeAttr('disabled');
                 jQuery('#idSubmitButton').data('state',1).text('Starten');
                 ws.close();
                 return false;
             }
+
 			fIntervall = jQuery('#idIntervall').val();
 			iDauer = jQuery('#idDauer').val();
 			jQuery('#idIntervall, #idDauer').attr('disabled','true');
+			jQuery('#idLogData' ).empty();
+
             jQuery('#idSubmitButton').data('state',0).text('Stoppen');
             parameter.intervall = fIntervall;
-            sendCommand('start', parameter);
 			series.data = [];
+            sendCommand('start', parameter);
+
             return false;
         });
 
-		jQuery('#idIntervall, #idDauer').removeAttr('disabled');
+		/**
+		 * INIT Plot
+		 */
 		plot = jQuery.plot("#placeholder div", [series],{
 			grid: {
 				hoverable: true,
@@ -196,6 +250,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 			},
 			shadowSize: 1,
 			tooltip: true,
+			/**
+			 * HOVER ueber einen Punkt
+			 */
 			tooltipOpts: {
 				content: function(label, xval, yval, flotItem){
 					var Zeit = new Date();
@@ -205,7 +262,57 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 			}
 		});
     });
+	/**
+	 * Ueberorueft ob die Eingabe in ein Feld einer Zahl entspricht
+	 *
+	 * @param oElement String|Object eines Elements
+	 */
+	function checkOptionInput(oElement) {
+		iData = jQuery( oElement ).val();
+		if( !isNumber( iData ) ) {
+			jQuery( oElement ).parent( '.form-group:first' ).addClass( 'has-error' );
 
+			/*
+				Ich bin keine Zahl => value vergessen
+			 */
+			if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
+				iMinValue = null;
+			} else {
+				iMaxValue = null;
+			}
+		} else {
+			jQuery( oElement ).parent( '.form-group:first' ).removeClass( 'has-error' );
+
+			/*
+				Wuhu ich bin eine Zahl => value merken
+			 */
+			if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
+				iMinValue = iData;
+			} else {
+				iMaxValue = iData;
+			}
+		}
+	}
+
+	/**
+	 *	Ueberprueft ob eine Zahl oder nicht
+	 * @param mData
+	 * @returns boolean
+	 */
+	function isNumber(mData){
+		bResult = true;
+		if(isNaN(mData)){
+			bResult = false;
+		}else if(mData === ''){
+			bResult = false;
+		}
+		return bResult;
+	}
+
+	/**
+	 * Stellt die Connection zum Server her, wenn diese noch nicht besteht und bindet die "on" Methods
+	 * @param sJSON
+	 */
     function connectToWebSocket(sJSON) {
         if (ws == null) {
             sJSONBackUP = sJSON;
@@ -216,7 +323,6 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
                 };
 				ws.onclose = function(){
 					ws = null;
-					// onClose();
 				};
 				ws.onerror = function(){
 					ws = null;
@@ -239,6 +345,11 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         }
     }
 
+	/**
+	 * Sendet ein Kommand an den Server und kuemmert sich um die Verbindung
+	 * @param sCommand
+	 * @param oParams
+	 */
     function sendCommand(sCommand, oParams) {
         var webserver = { };
         webserver.command = sCommand;
@@ -247,10 +358,10 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         connectToWebSocket(sJSON);
     }
 
-    function onClose(){
-        jQuery('#placeholder, #idPanelField').addClass('hidden');
-    }
-
+	/**
+	 *	Neue Daten vom Server bekommen
+	 * @param oParams
+	 */
     function getNewData(oParams) {
         if (typeof oParams.polarity == 'undefined') {
             jQuery('#idPolungList').addClass('hidden');
@@ -258,7 +369,23 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
             jQuery('#idPolungList').removeClass('hidden');
             jQuery('#idPolung').text(oParams.polarity);
         }
+
+		/**
+		 * Auf MIN/MAX ueberpruefen
+		 */
+		if( iMaxValue != null && iMaxValue < oParams.value ){
+			addLog('Wert von '+oParams.value+' überschreitet den maximal Wert von '+iMaxValue+'.');
+		}
+
+		if( iMinValue != null && iMinValue > oParams.value ){
+			addLog('Wert von '+oParams.value+' unterschreitet den minimal Wert von '+iMinValue+'.');
+		}
+
         jQuery('#idWert').text(oParams.value);
+
+		/**
+		 * Wenn sich die Einheit aendert, loeschen wir mal alle Daten
+		 */
         if (sUnit != oParams.unit) {
 			series.data = [];
             sUnit = oParams.unit;
@@ -276,6 +403,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         jQuery('#placeholder, #idPanelField').removeClass('hidden');
     }
 
+	/**
+	 * Alle alten Daten aus der Liste loeschen
+	 */
 	function deleteOldDataFromSeries(){
 		var iMinTime = (new Date).getTime() - (iDauer * 60 * 1000);
 
@@ -287,6 +417,10 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 		}
 	}
 
+	/**
+	 * Handling von Errors damit diese im Errorbereich angezeigt werden.
+	 * @param aError
+	 */
     function errorHandling(aError) {
         sHTML = '<div class="alert alert-danger">'+
                     '<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times</button>';
@@ -297,6 +431,9 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
         jQuery('#idErrorBox').html(sHTML);
     }
 
+	/**
+	 * Die aktuellen Daten in ein CSV uebertragen und zum Download anbieten
+	 */
 	function saveCSV(){
 		var sString = "";
 		var aData = series.data;
@@ -307,6 +444,13 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 		saveAs(blob, "firebird.csv");
 	}
 
+	/**
+	 * @param sString
+	 */
+	function addLog(sString){
+		jQuery( '#idLogData' ).append('<li>'+sString+'</li>').scrollTop(jQuery( '#idLogData' )[0].scrollHeight);
+	}
+
 </script>
 <!-- Legal 
 ============= -->
@@ -314,7 +458,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
     <div class="container">
         <div class="row">
             <div class="col-sm-12">
-                <p>&copy; Johannes Wolf &amp; Oliver Horn</p>
+                <p>&copy; 2014 Johannes Wolf &amp; Oliver Horn</p>
             </div>
         </div>
     </div>
