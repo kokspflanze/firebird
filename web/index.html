@@ -320,6 +320,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 				};
 				ws.onerror = function(){
 					ws = null;
+					errorHandling(['please check websocket connection']);
 				};
                 ws.onmessage = function (evt) {
                     oData = JSON.parse(evt.data);
