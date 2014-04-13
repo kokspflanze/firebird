@@ -182,8 +182,8 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 		/**
 		 * gegen den Cache
 		 */
-		jQuery('#idMinInput').val(0);
-		jQuery('#idMaxInput').val(1);
+		jQuery('#idMinInput').val('');
+		jQuery('#idMaxInput').val('');
 		jQuery('#idIntervall, #idDauer').removeAttr('disabled');
 
 		/**
@@ -300,13 +300,7 @@ alte Units speichern und diese beim wechsel zurück mit ausgeben
 	 * @returns boolean
 	 */
 	function isNumber(mData){
-		bResult = true;
-		if(isNaN(mData)){
-			bResult = false;
-		}else if(mData === ''){
-			bResult = false;
-		}
-		return bResult;
+		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '';
 	}
 
 	/**
