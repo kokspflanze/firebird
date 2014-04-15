@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -34,7 +35,7 @@ namespace metexsrv
                 command.parameter = new Dictionary<string, string>() {
                     {"value", value.value},
                     {"unit", value.unit},
-                    {"timestamp",  Convert.ToString(value.timestamp.Ticks / TimeSpan.TicksPerMillisecond)}
+                    {"timestamp",  (value.timestamp.Ticks / TimeSpan.TicksPerMillisecond).ToString(CultureInfo.InvariantCulture)}
                 };
 
                 Session.Send(JsonConvert.SerializeObject(command));
@@ -48,7 +49,7 @@ namespace metexsrv
             {
                 case "start":
                     RecievesValues = true;
-                    Intervall = Convert.ToDouble(command.parameter["intervall"]);
+                    Intervall = Double.Parse(command.parameter["intervall"], CultureInfo.InvariantCulture);
                     break;
 
                 case "stop":

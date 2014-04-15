@@ -72,12 +72,7 @@ C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\metexsrv.exe
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\metexsrv.pdb
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\Newtonsoft.Json.dll
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperWebSocket.dll
-C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\log4net.dll
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\Newtonsoft.Json.pdb
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\Newtonsoft.Json.xml
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperWebSocket.pdb
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperWebSocket.xml
-C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperSocket.Common.pdb
-C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperSocket.Common.xml
-C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperSocket.SocketBase.pdb
-C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperSocket.SocketBase.xml
