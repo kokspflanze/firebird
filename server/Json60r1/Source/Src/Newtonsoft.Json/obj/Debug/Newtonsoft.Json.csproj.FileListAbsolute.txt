@@ -1,0 +1,16 @@
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.xml
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.pdb
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll.CodeAnalysisLog.xml
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll.lastcodeanalysissucceeded
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.csprojResolveAssemblyReference.cache
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.dll
+C:\Users\indigo\Desktop\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.pdb
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.xml
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.pdb
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll.CodeAnalysisLog.xml
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\bin\Debug\Net45\Newtonsoft.Json.dll.lastcodeanalysissucceeded
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.csprojResolveAssemblyReference.cache
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.dll
+E:\FireBird\Json60r1\Source\Src\Newtonsoft.Json\obj\Debug\Newtonsoft.Json.pdb
