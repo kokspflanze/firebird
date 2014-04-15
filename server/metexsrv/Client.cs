@@ -23,7 +23,7 @@ namespace metexsrv
         public Client(WebSocketSession _session)
         {
             Session = _session;
-            RecievesValues = true;
+            RecievesValues = false;
         }
 
         public void SendValue(DeviceValue value)
@@ -40,7 +40,7 @@ namespace metexsrv
 
                 Session.Send(JsonConvert.SerializeObject(command));
                 LastSend = DateTime.Now;
-            }
+            } 
         }
 
         public void ProcessCommand(Command command)
@@ -50,7 +50,7 @@ namespace metexsrv
                 case "start":
                     RecievesValues = true;
                     Intervall = Double.Parse(command.parameter["intervall"], CultureInfo.InvariantCulture);
-                    LastSend = DateTime.Now.AddSeconds(0.0 - Intervall);
+                    LastSend = DateTime.Now.AddDays(-1);
                     break;
 
                 case "stop":
