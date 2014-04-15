@@ -376,7 +376,7 @@
         }
         jQuery('#idEinheit').text(oParams.unit);
 
-		series.data.push([ oParams.timestamp, oParams.value]);
+        series.data.push([ (new Date).getTime(), oParams.value]);
 
 		deleteOldDataFromSeries();
 
