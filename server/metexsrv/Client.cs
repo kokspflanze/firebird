@@ -50,6 +50,7 @@ namespace metexsrv
                 case "start":
                     RecievesValues = true;
                     Intervall = Double.Parse(command.parameter["intervall"], CultureInfo.InvariantCulture);
+                    LastSend = DateTime.Now;
                     break;
 
                 case "stop":
