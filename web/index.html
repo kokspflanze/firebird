@@ -289,7 +289,8 @@
 	 * @returns boolean
 	 */
 	function isNumber(mData){
-		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '';
+        mTrimData = jQuery.trim(mData);
+		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '' && mData == mTrimData;
 	}
 
 	/**
@@ -376,7 +377,7 @@
         }
         jQuery('#idEinheit').text(oParams.unit);
 
-		series.data.push([ oParams.timestamp, oParams.value]);
+        series.data.push([ (new Date).getTime(), oParams.value]);
 
 		deleteOldDataFromSeries();
 
