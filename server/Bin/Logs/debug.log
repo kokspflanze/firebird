@@ -1,9 +1,0 @@
-2014-03-12 12:05:48,528 [3476] DEBUG WebSocketServer-45653674 - SubProtocol Basic found the commands below:
-
-2014-03-12 12:05:48,841 [3476] DEBUG WebSocketServer-45653674 - Listener (0.0.0.0:12345) was started
-2014-03-12 12:21:46,024 [2560] DEBUG WebSocketServer-46104728 - SubProtocol Basic found the commands below:
-
-2014-03-12 12:21:46,062 [2560] DEBUG WebSocketServer-46104728 - Listener (0.0.0.0:12345) was started
-2014-03-12 12:22:39,253 [3580] DEBUG WebSocketServer-46104728 - SubProtocol Basic found the commands below:
-
-2014-03-12 12:22:39,290 [3580] DEBUG WebSocketServer-46104728 - Listener (0.0.0.0:12345) was started

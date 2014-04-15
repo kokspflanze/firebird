@@ -25,3 +25,17 @@ E:\FireBird\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.Sock
 E:\FireBird\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.csprojResolveAssemblyReference.cache
 E:\FireBird\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.dll
 E:\FireBird\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.pdb
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperWebSocket.XML
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperWebSocket.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperWebSocket.pdb
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\log4net.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\Newtonsoft.Json.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.Common.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.SocketBase.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.Common.pdb
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.Common.xml
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.SocketBase.pdb
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\bin\Debug\SuperSocket.SocketBase.xml
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.csprojResolveAssemblyReference.cache
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.dll
+C:\Users\indigo\Documents\GitHub\firebird\server\SuperWebSocket(0.8).Source\SuperWebSocket\obj\Debug\SuperWebSocket.pdb

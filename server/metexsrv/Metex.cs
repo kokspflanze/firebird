@@ -24,8 +24,8 @@ namespace metexsrv
             DeviceValue value = new DeviceValue();
 
             String[] values = source.Split(new String[] {" ", "\t"}, StringSplitOptions.RemoveEmptyEntries);
-
-            // Hack ekelhaft pfui!
+               
+            // Wert in Einzelteile zerteilen
             if (values.Length == 2)
             {
                 values[2] = values[1];

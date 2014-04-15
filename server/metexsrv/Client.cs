@@ -15,6 +15,9 @@ namespace metexsrv
 
         public WebSocketSession Session { set;  get; }
         public Boolean RecievesValues { set; get; }
+        public Double Intervall { set; get; }
+
+        private DateTime LastSend = DateTime.Now;
 
         public Client(WebSocketSession _session)
         {
@@ -24,17 +27,18 @@ namespace metexsrv
 
         public void SendValue(DeviceValue value)
         {
-            if (RecievesValues)
+            if (RecievesValues && LastSend.AddSeconds(Intervall) <= DateTime.Now)
             {
                 Command command = new Command();
                 command.command = "update";
                 command.parameter = new Dictionary<string, string>() {
                     {"value", value.value},
                     {"unit", value.unit},
-                    {"timestamp", Convert.ToString(value.timestamp)}
+                    {"timestamp",  Convert.ToString(value.timestamp.Ticks / TimeSpan.TicksPerMillisecond)}
                 };
 
                 Session.Send(JsonConvert.SerializeObject(command));
+                LastSend = DateTime.Now;
             }
         }
 
@@ -44,14 +48,11 @@ namespace metexsrv
             {
                 case "start":
                     RecievesValues = true;
+                    Intervall = Convert.ToDouble(command.parameter["intervall"]);
                     break;
 
                 case "stop":
                     RecievesValues = false;
-                    break;
-
-                case "intervall":
-                    Console.WriteLine("Command not implemented yet");
                     break;
             }
         }

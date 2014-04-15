@@ -12,29 +12,41 @@ namespace metexsrv
     {
         class Configuration
         {
+            // Defaul Server Port
             public static Int16 Port = 12345;
+
+            // Default COM-Port name
             public static String COMPort = "COM1";
+
+            // Testmodus flag
             public static Boolean TestMode = false;
         }
 
+        // Globale geraet Instanz
         public static Device device = null;
 
         static void Main(string[] args)
         {
+            // Kommandozeilen parameter parsen
             ParseArguments(args);
 
+            // Virtuelles geraet erstellen
             if (Program.Configuration.TestMode)
                 device = new TestDevice();
             else
                 device = new Metex(Program.Configuration.COMPort);
 
+            // Port oeffnen
             device.Open();
 
+            // Server starten
             Server server = new Server();
             server.Listen(Program.Configuration.Port);
 
-            OpenAppPage()
+            // 'index.html' im default browser oeffnen
+            OpenAppPage();
 
+            // Auf Tastatureingabe warten
             Console.ReadKey();
         }
 
@@ -68,11 +80,16 @@ namespace metexsrv
 
         static void OpenAppPage()
         {
-            const String fileName = "start.html";
+            const String fileName = "index.html";
 
             if (File.Exists(fileName))
             {
                 Process.Start(fileName);
+            }
+            else
+            if (File.Exists("..\\web\\" + fileName))
+            {
+                Process.Start("..\\web\\" + fileName);
             }
         }
     }

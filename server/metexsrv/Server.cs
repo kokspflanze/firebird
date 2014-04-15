@@ -29,6 +29,7 @@ namespace metexsrv
 
             server.NewSessionConnected += new SessionHandler<WebSocketSession>(OnOpenSession);
             server.SessionClosed += new SessionHandler<WebSocketSession, CloseReason>(OnCloseSession);
+            server.NewMessageReceived += new SessionHandler<WebSocketSession, String>(OnSessionMessage); 
 
             if (!server.Start())
             {
