@@ -289,7 +289,8 @@
 	 * @returns boolean
 	 */
 	function isNumber(mData){
-		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '';
+        mTrimData = jQuery.trim(mData);
+		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '' && mData == mTrimData;
 	}
 
 	/**
