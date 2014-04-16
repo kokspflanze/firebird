@@ -155,246 +155,248 @@
     <div class="clearfix margin-bottom-20"></div>
 </div>
 <script type="text/javascript">
-    var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5, iMinValue, iMaxValue;
+  var ws, sUnit, bInitPlot = false, sJSONBackUP, plot, iDauer = 5, iMinValue, iMaxValue;
 
-	var series = {
-		label: false,
-		data: [],
-		lines: {
-			show: true,
-			fill: true
-		},
-		points: { show: true }
-	};
+  var series = {
+  label: false,
+  data: [],
+  lines: {
+  show: true,
+  fill: true
+  },
+  points: { show: true }
+  };
 
-	jQuery(document).ready(function () {
-		/**
-		 * gegen den Cache
-		 */
-		jQuery('#idMinInput').val('');
-		jQuery('#idMaxInput').val('');
-		jQuery('#idIntervall, #idDauer').removeAttr('disabled');
+  jQuery(document).ready(function () {
+  /**
+  * gegen den Cache
+  */
+  jQuery('#idMinInput').val('');
+  jQuery('#idMaxInput').val('');
+  jQuery('#idIntervall, #idDauer').removeAttr('disabled');
 
-		/**
-		 * speichern der MIN/MAX Werte
-		 */
-		checkOptionInput( '#idMinInput' );
-		checkOptionInput( '#idMaxInput' );
+  /**
+  * speichern der MIN/MAX Werte
+  */
+  checkOptionInput( '#idMinInput' );
+  checkOptionInput( '#idMaxInput' );
 
-		jQuery('#idMinInput, #idMaxInput').change(function(){
-			checkOptionInput( this );
-		});
+  jQuery('#idMinInput, #idMaxInput').change(function(){
+  checkOptionInput( this );
+  });
 
-        jQuery('#idIntervallChange').submit(function () {
-            parameter = { };
+  jQuery('#idIntervallChange').submit(function () {
+  parameter = { };
 
-			/**
-			 * Click auf den Stoppen Button
-			 */
-            if(jQuery('#idSubmitButton').data('state') == 0){
-				jQuery('#idIntervall, #idDauer').removeAttr('disabled');
-                jQuery('#idSubmitButton').data('state',1).text('Starten');
-                ws.close();
-                return false;
-            }
+  /**
+  * Click auf den Stoppen Button
+  */
+  if(jQuery('#idSubmitButton').data('state') == 0){
+  jQuery('#idIntervall, #idDauer').removeAttr('disabled');
+  jQuery('#idSubmitButton').data('state',1).text('Starten');
+  ws.close();
+  return false;
+  }
 
-			fIntervall = jQuery('#idIntervall').val();
-			iDauer = jQuery('#idDauer').val();
-			jQuery('#idIntervall, #idDauer').attr('disabled','true');
-			jQuery('#idLogData' ).empty();
+  fIntervall = jQuery('#idIntervall').val();
+  iDauer = jQuery('#idDauer').val();
+  jQuery('#idIntervall, #idDauer').attr('disabled','true');
+  jQuery('#idLogData' ).empty();
 
-            jQuery('#idSubmitButton').data('state',0).text('Stoppen');
-            parameter.intervall = fIntervall;
-			series.data = [];
-            sendCommand('start', parameter);
+  jQuery('#idSubmitButton').data('state',0).text('Stoppen');
+  parameter.intervall = fIntervall;
+  series.data = [];
+  sendCommand('start', parameter);
 
-            return false;
-        });
+  return false;
+  });
 
-		/**
-		 * INIT Plot
-		 */
-		plot = jQuery.plot("#placeholder div", [series],{
-			grid: {
-				hoverable: true,
-				borderWidth: 1,
-				minBorderMargin: 20,
-				labelMargin: 10,
-				color: "#746441",
-				backgroundColor: {
-					colors: ["#fff", "#e4f4f4"]
-				},
-				margin: {
-					top: 8,
-					bottom: 20,
-					left: 20
-				}
-			},
-			yaxis: {
-				tickDecimals: 0
-			},
-			xaxis: {
-				mode: "time",
-				timezone: "browser"
-			},
-			shadowSize: 1,
-			tooltip: true,
-			/**
-			 * HOVER ueber einen Punkt
-			 */
-			tooltipOpts: {
-				content: function(label, xval, yval, flotItem){
-					var Zeit = new Date();
-					Zeit.setTime (xval);
-					return yval+" "+jQuery("#idEinheit").text()+" @ "+Zeit.getHours()+":"+Zeit.getMinutes()+":"+Zeit.getSeconds()+"."+Zeit.getMilliseconds();
-				}
-			}
-		});
-    });
-	/**
-	 * Ueberorueft ob die Eingabe in ein Feld einer Zahl entspricht
-	 *
-	 * @param oElement String|Object eines Elements
-	 */
-	function checkOptionInput(oElement) {
-		iData = jQuery( oElement ).val();
-		if( !isNumber( iData ) ) {
-			jQuery( oElement ).parent( '.form-group:first' ).addClass( 'has-error' );
+  /**
+  * INIT Plot
+  */
+  plot = jQuery.plot("#placeholder div", [series],{
+  grid: {
+  hoverable: true,
+  borderWidth: 1,
+  minBorderMargin: 20,
+  labelMargin: 10,
+  color: "#746441",
+  backgroundColor: {
+  colors: ["#fff", "#e4f4f4"]
+  },
+  margin: {
+  top: 8,
+  bottom: 20,
+  left: 20
+  }
+  },
+  yaxis: {
+  tickDecimals: 0
+  },
+  xaxis: {
+  mode: "time",
+  timezone: "browser"
+  },
+  shadowSize: 1,
+  tooltip: true,
+  /**
+  * HOVER ueber einen Punkt
+  */
+  tooltipOpts: {
+  content: function(label, xval, yval, flotItem){
+  var Zeit = new Date();
+  Zeit.setTime (xval);
+  return yval+" "+jQuery("#idEinheit").text()+" @ "+Zeit.getHours()+":"+Zeit.getMinutes()+":"+Zeit.getSeconds()+"."+Zeit.getMilliseconds();
+  }
+  }
+  });
+  });
+  /**
+  * Ueberorueft ob die Eingabe in ein Feld einer Zahl entspricht
+  *
+  * @param oElement String|Object eines Elements
+  */
+  function checkOptionInput(oElement) {
+  iData = jQuery( oElement ).val();
+  iData = iData.replace(',', '.');
+  if( !isNumber( iData ) ) {
+  jQuery( oElement ).parent( '.form-group:first' ).addClass( 'has-error' );
 
-			/*
-				Ich bin keine Zahl => value vergessen
-			 */
-			if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
-				iMinValue = null;
-			} else {
-				iMaxValue = null;
-			}
-		} else {
-			jQuery( oElement ).parent( '.form-group:first' ).removeClass( 'has-error' );
+  /*
+  Ich bin keine Zahl => value vergessen
+  */
+  if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
+  iMinValue = null;
+  } else {
+  iMaxValue = null;
+  }
+  } else {
+  jQuery( oElement ).parent( '.form-group:first' ).removeClass( 'has-error' );
 
-			/*
-				Wuhu ich bin eine Zahl => value merken
-			 */
-			if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
-				iMinValue = iData;
-			} else {
-				iMaxValue = iData;
-			}
-		}
-	}
+  /*
+  Wuhu ich bin eine Zahl => value merken
+  */
+  if( jQuery( oElement ).attr( 'id' ) == 'idMinInput' ) {
+  iMinValue = iData;
+  } else {
+  iMaxValue = iData;
+  }
+  }
+  }
 
-	/**
-	 *	Ueberprueft ob eine Zahl oder nicht
-	 * @param mData
-	 * @returns boolean
-	 */
-	function isNumber(mData){
-        mTrimData = jQuery.trim(mData);
-		return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '' && mData == mTrimData;
-	}
+  /**
+  *	Ueberprueft ob eine Zahl oder nicht
+  * @param mData
+  * @returns boolean
+  */
+  function isNumber(mData){
+  mTrimData = jQuery.trim(mData);
+  return (typeof mData == 'string' || typeof mData == 'number') && !isNaN(mData - 0) && mData !== '' && mData == mTrimData;
+  }
 
-	/**
-	 * Stellt die Connection zum Server her, wenn diese noch nicht besteht und bindet die "on" Methods
-	 * @param sJSON
-	 */
-    function connectToWebSocket(sJSON) {
-        if (ws == null) {
-            sJSONBackUP = sJSON;
-            try {
-                ws = new WebSocket('ws://localhost:12345');
-                ws.onopen = function(){
-                    ws.send(sJSONBackUP);
-                };
-				ws.onclose = function(){
-					ws = null;
-				};
-				ws.onerror = function(){
-					ws = null;
-					errorHandling(['please check websocket connection']);
-				};
-                ws.onmessage = function (evt) {
-                    oData = JSON.parse(evt.data);
-                    switch (oData.command) {
-                        case 'update':
-                            getNewData(oData.parameter);
-                            break;
-                        default:
-                            errorHandling(['smth go wrong']);
-                    }
-                };
-            } catch (err) {
-                errorHandling(['please check websocket connection']);
-            }
-        }else{
-            ws.send(sJSON);
-        }
-    }
+  /**
+  * Stellt die Connection zum Server her, wenn diese noch nicht besteht und bindet die "on" Methods
+  * @param sJSON
+  */
+  function connectToWebSocket(sJSON) {
+  if (ws == null) {
+  sJSONBackUP = sJSON;
+  try {
+  ws = new WebSocket('ws://localhost:12345');
+  ws.onopen = function(){
+  ws.send(sJSONBackUP);
+  };
+  ws.onclose = function(){
+  ws = null;
+  };
+  ws.onerror = function(){
+  ws = null;
+  errorHandling(['please check websocket connection']);
+  };
+  ws.onmessage = function (evt) {
+  oData = JSON.parse(evt.data);
+  switch (oData.command) {
+  case 'update':
+  getNewData(oData.parameter);
+  break;
+  default:
+  errorHandling(['smth go wrong']);
+  }
+  };
+  } catch (err) {
+  errorHandling(['please check websocket connection']);
+  }
+  }else{
+  ws.send(sJSON);
+  }
+  }
 
-	/**
-	 * Sendet ein Kommand an den Server und kuemmert sich um die Verbindung
-	 * @param sCommand
-	 * @param oParams
-	 */
-    function sendCommand(sCommand, oParams) {
-        var webserver = { };
-        webserver.command = sCommand;
-        webserver.parameter = oParams;
-        sJSON = JSON.stringify(webserver);
-        connectToWebSocket(sJSON);
-    }
+  /**
+  * Sendet ein Kommand an den Server und kuemmert sich um die Verbindung
+  * @param sCommand
+  * @param oParams
+  */
+  function sendCommand(sCommand, oParams) {
+  var webserver = { };
+  webserver.command = sCommand;
+  webserver.parameter = oParams;
+  sJSON = JSON.stringify(webserver);
+  connectToWebSocket(sJSON);
+  }
 
-	/**
-	 *	Neue Daten vom Server bekommen
-	 * @param oParams
-	 */
-    function getNewData(oParams) {
-        if (typeof oParams.polarity == 'undefined') {
-            jQuery('#idPolungList').addClass('hidden');
-        } else {
-            jQuery('#idPolungList').removeClass('hidden');
-            jQuery('#idPolung').text(oParams.polarity);
-        }
+  /**
+  *	Neue Daten vom Server bekommen
+  * @param oParams
+  */
+  function getNewData(oParams) {
+  if (typeof oParams.polarity == 'undefined' || oParams.polarity == null || oParams.polarity == '') {
+  jQuery('#idPolung').text('');
+  jQuery('#idPolungList').addClass('hidden');
+  } else {
+  jQuery('#idPolungList').removeClass('hidden');
+  jQuery('#idPolung').text(oParams.polarity);
+  }
 
-		/**
-		 * Auf MIN/MAX ueberpruefen
-		 */
-		if( iMaxValue != null && iMaxValue < oParams.value ){
+  /**
+  * Auf MIN/MAX ueberpruefen
+  */
+  if( iMaxValue != null && parseFloat(iMaxValue) < oParams.value ){
 			addLog('Wert von '+oParams.value+' überschreitet den maximal Wert von '+iMaxValue+'.');
 		}
 
-		if( iMinValue != null && iMinValue > oParams.value ){
-			addLog('Wert von '+oParams.value+' unterschreitet den minimal Wert von '+iMinValue+'.');
-		}
-
-        jQuery('#idWert').text(oParams.value);
-
-		/**
-		 * Wenn sich die Einheit aendert, loeschen wir mal alle Daten
-		 */
-        if (sUnit != oParams.unit) {
-			series.data = [];
-            sUnit = oParams.unit;
-        }
-        jQuery('#idEinheit').text(oParams.unit);
-
-        series.data.push([ (new Date).getTime(), oParams.value]);
-
-		deleteOldDataFromSeries();
-
-		plot.setData([series]);
-		plot.setupGrid();
-		plot.draw();
-
-        jQuery('#placeholder, #idPanelField').removeClass('hidden');
+		if( iMinValue != null && parseFloat(iMinValue) > oParams.value ){
+    addLog('Wert von '+oParams.value+' unterschreitet den minimal Wert von '+iMinValue+'.');
     }
 
-	/**
-	 * Alle alten Daten aus der Liste loeschen
-	 */
-	function deleteOldDataFromSeries(){
-		var iMinTime = (new Date).getTime() - (iDauer * 60 * 1000);
+    jQuery('#idWert').text(oParams.value);
 
-		for(var i = 0, len = series.data.length; i < len; i++){
+    /**
+    * Wenn sich die Einheit aendert, loeschen wir mal alle Daten
+    */
+    if (sUnit != oParams.unit) {
+    series.data = [];
+    sUnit = oParams.unit;
+    }
+    jQuery('#idEinheit').text(oParams.unit);
+
+    series.data.push([ (new Date).getTime(), oParams.value]);
+
+    deleteOldDataFromSeries();
+
+    plot.setData([series]);
+    plot.setupGrid();
+    plot.draw();
+
+    jQuery('#placeholder, #idPanelField').removeClass('hidden');
+    }
+
+    /**
+    * Alle alten Daten aus der Liste loeschen
+    */
+    function deleteOldDataFromSeries(){
+    var iMinTime = (new Date).getTime() - (iDauer * 60 * 1000);
+
+    for(var i = 0, len = series.data.length; i < len; i++){
 			if(iMinTime < series.data[i][0]){
 				break;
 			}
@@ -414,16 +416,17 @@
         });
         sHTML += '</div>';
         jQuery('#idErrorBox').html(sHTML);
-    }
+        }
 
-	/**
-	 * Die aktuellen Daten in ein CSV uebertragen und zum Download anbieten
-	 */
-	function saveCSV(){
-		var sString = "";
-		var aData = series.data;
-		for(var i = 0, len = aData.length; i < len; i++){
-			sString += aData[i][0]+"\t"+aData[i][1]+"\t"+sUnit+"\r\n";
+        /**
+        * Die aktuellen Daten in ein CSV uebertragen und zum Download anbieten
+        */
+        function saveCSV(){
+        var sString = "";
+        var aData = series.data;
+        var sPolarity = jQuery('#idPolung').text();
+        for(var i = 0, len = aData.length; i < len; i++){
+			sString += aData[i][0]+"\t"+(sPolarity != ''?sPolarity+"\t":'')+aData[i][1]+"\t"+sUnit+"\r\n";
 		}
 		var blob = new Blob([sString], {type: "text/plain;charset=utf-8"});
 		saveAs(blob, "firebird.csv");
