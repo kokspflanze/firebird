@@ -24,19 +24,34 @@ namespace metexsrv
             DeviceValue value = new DeviceValue();
 
             String[] values = source.Split(new String[] {" ", "\t"}, StringSplitOptions.RemoveEmptyEntries);
-               
-            // Wert in Einzelteile zerteilen
-            if (values.Length == 2)
-            {
-                values[2] = values[1];
-                values[1] = "-" + values[0].Split('-')[1];
-                values[0] = values[0].Split('-')[0];
-            }
+            
+            int startsWithComma = values[0] == "." ? 1 : 0;
 
+            // Wert in Einzelteile zerteilen
+            if (values.Length == 2 || startsWithComma != 0)
+            {
+                String tempValue = values[0 + startsWithComma];
+                tempValue = tempValue.Replace("O", "0");
+                tempValue = tempValue.Replace("L", "0");
+
+                while (tempValue.StartsWith("00"))
+                    tempValue = tempValue.Remove(0, 1);
+
+                value.flow = "";
+                value.value = tempValue;
+                value.unit = values[1 + startsWithComma];
+                value.timestamp = DateTime.Now;
+            }
+            else
             if (values.Length == 3)
             {
+                String tempValue = values[1];
+
+                while (tempValue.StartsWith("00"))
+                    tempValue = tempValue.Remove(0, 1);
+
                 value.flow = values[0];
-                value.value = values[1];
+                value.value = tempValue;
                 value.unit = values[2];
                 value.timestamp = DateTime.Now;
             }

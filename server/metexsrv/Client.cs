@@ -35,6 +35,7 @@ namespace metexsrv
                 command.parameter = new Dictionary<string, string>() {
                     {"value", value.value},
                     {"unit", value.unit},
+                    {"polarity", value.flow},
                     {"timestamp",  (value.timestamp.Ticks / TimeSpan.TicksPerMillisecond).ToString(CultureInfo.InvariantCulture)}
                 };
 

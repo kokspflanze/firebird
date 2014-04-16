@@ -76,3 +76,16 @@ C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\Newtonsoft.J
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\Newtonsoft.Json.xml
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperWebSocket.pdb
 C:\Users\indigo\Documents\GitHub\firebird\server\metexsrv\bin\Debug\SuperWebSocket.xml
+E:\FireBird\server\metexsrv\bin\Debug\metexsrv.exe.config
+E:\FireBird\server\metexsrv\obj\Debug\metexsrv.exe
+E:\FireBird\server\metexsrv\obj\Debug\metexsrv.pdb
+E:\FireBird\server\metexsrv\bin\Debug\metexsrv.exe
+E:\FireBird\server\metexsrv\bin\Debug\metexsrv.pdb
+E:\FireBird\server\metexsrv\bin\Debug\Newtonsoft.Json.dll
+E:\FireBird\server\metexsrv\bin\Debug\SuperWebSocket.dll
+E:\FireBird\server\metexsrv\bin\Debug\log4net.dll
+E:\FireBird\server\metexsrv\bin\Debug\Newtonsoft.Json.pdb
+E:\FireBird\server\metexsrv\bin\Debug\Newtonsoft.Json.xml
+E:\FireBird\server\metexsrv\bin\Debug\SuperWebSocket.pdb
+E:\FireBird\server\metexsrv\bin\Debug\SuperWebSocket.xml
+E:\FireBird\server\metexsrv\obj\Debug\metexsrv.csprojResolveAssemblyReference.cache
